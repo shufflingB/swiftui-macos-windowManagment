@@ -7,20 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FF4CA82927B4402D00E9A47F /* swiftuiWindowFunApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CA82827B4402D00E9A47F /* swiftuiWindowFunApp.swift */; };
+		FF4CA82927B4402D00E9A47F /* AppRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4CA82827B4402D00E9A47F /* AppRoot.swift */; };
 		FF4CA82D27B4402F00E9A47F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF4CA82C27B4402F00E9A47F /* Assets.xcassets */; };
 		FF4CA83027B4402F00E9A47F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF4CA82F27B4402F00E9A47F /* Preview Assets.xcassets */; };
+		FF6B9BA127C7C27E004FE896 /* SingletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B9BA027C7C27E004FE896 /* SingletonView.swift */; };
+		FF6B9BA327C7C551004FE896 /* AppModel+NSWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B9BA227C7C551004FE896 /* AppModel+NSWindowDelegate.swift */; };
+		FF6B9BA527C7D6AB004FE896 /* WindowConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B9BA427C7D6AB004FE896 /* WindowConfig.swift */; };
+		FF6B9BA727C91865004FE896 /* GenericView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B9BA627C91865004FE896 /* GenericView.swift */; };
 		FFE34DCE27B57BA1008EDC82 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE34DCD27B57BA1008EDC82 /* AppModel.swift */; };
+		FFE34DD627B5813D008EDC82 /* HostingWindowFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE34DD527B5813D008EDC82 /* HostingWindowFinder.swift */; };
+		FFE34DDA27BD2E9A008EDC82 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE34DD927BD2E9A008EDC82 /* MainView.swift */; };
+		FFECCA9227C550A6005B628A /* FileMenuCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFECCA9127C550A6005B628A /* FileMenuCommands.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FF4CA82527B4402D00E9A47F /* swiftuiWindowFun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = swiftuiWindowFun.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF4CA82827B4402D00E9A47F /* swiftuiWindowFunApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swiftuiWindowFunApp.swift; sourceTree = "<group>"; };
+		FF4CA82827B4402D00E9A47F /* AppRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoot.swift; sourceTree = "<group>"; };
 		FF4CA82C27B4402F00E9A47F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FF4CA82F27B4402F00E9A47F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FF4CA83127B4402F00E9A47F /* swiftuiWindowFun.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = swiftuiWindowFun.entitlements; sourceTree = "<group>"; };
 		FF4CA83727B440A500E9A47F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FF6B9BA027C7C27E004FE896 /* SingletonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingletonView.swift; sourceTree = "<group>"; };
+		FF6B9BA227C7C551004FE896 /* AppModel+NSWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppModel+NSWindowDelegate.swift"; sourceTree = "<group>"; };
+		FF6B9BA427C7D6AB004FE896 /* WindowConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowConfig.swift; sourceTree = "<group>"; };
+		FF6B9BA627C91865004FE896 /* GenericView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericView.swift; sourceTree = "<group>"; };
 		FFE34DCD27B57BA1008EDC82 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		FFE34DD527B5813D008EDC82 /* HostingWindowFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostingWindowFinder.swift; sourceTree = "<group>"; };
+		FFE34DD927BD2E9A008EDC82 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		FFECCA5827C3BB5B005B628A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FFECCA9127C550A6005B628A /* FileMenuCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMenuCommands.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +52,7 @@
 		FF4CA81C27B4402D00E9A47F = {
 			isa = PBXGroup;
 			children = (
-				FFE34DCD27B57BA1008EDC82 /* AppModel.swift */,
+				FFECCA5827C3BB5B005B628A /* README.md */,
 				FF4CA82727B4402D00E9A47F /* swiftuiWindowFun */,
 				FF4CA82627B4402D00E9A47F /* Products */,
 			);
@@ -54,8 +69,10 @@
 		FF4CA82727B4402D00E9A47F /* swiftuiWindowFun */ = {
 			isa = PBXGroup;
 			children = (
+				FF4CA82827B4402D00E9A47F /* AppRoot.swift */,
+				FF6B9BA827C92B7A004FE896 /* Models */,
+				FFE34DDB27BD2EA7008EDC82 /* SwiftUI */,
 				FF4CA83727B440A500E9A47F /* Info.plist */,
-				FF4CA82827B4402D00E9A47F /* swiftuiWindowFunApp.swift */,
 				FF4CA82C27B4402F00E9A47F /* Assets.xcassets */,
 				FF4CA83127B4402F00E9A47F /* swiftuiWindowFun.entitlements */,
 				FF4CA82E27B4402F00E9A47F /* Preview Content */,
@@ -69,6 +86,28 @@
 				FF4CA82F27B4402F00E9A47F /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FF6B9BA827C92B7A004FE896 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FFE34DCD27B57BA1008EDC82 /* AppModel.swift */,
+				FF6B9BA227C7C551004FE896 /* AppModel+NSWindowDelegate.swift */,
+				FF6B9BA427C7D6AB004FE896 /* WindowConfig.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FFE34DDB27BD2EA7008EDC82 /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				FFECCA9127C550A6005B628A /* FileMenuCommands.swift */,
+				FFE34DD527B5813D008EDC82 /* HostingWindowFinder.swift */,
+				FFE34DD927BD2E9A008EDC82 /* MainView.swift */,
+				FF6B9BA027C7C27E004FE896 /* SingletonView.swift */,
+				FF6B9BA627C91865004FE896 /* GenericView.swift */,
+			);
+			path = SwiftUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,8 +180,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF4CA82927B4402D00E9A47F /* swiftuiWindowFunApp.swift in Sources */,
+				FF6B9BA327C7C551004FE896 /* AppModel+NSWindowDelegate.swift in Sources */,
+				FFE34DD627B5813D008EDC82 /* HostingWindowFinder.swift in Sources */,
+				FF6B9BA727C91865004FE896 /* GenericView.swift in Sources */,
+				FF6B9BA527C7D6AB004FE896 /* WindowConfig.swift in Sources */,
+				FF4CA82927B4402D00E9A47F /* AppRoot.swift in Sources */,
 				FFE34DCE27B57BA1008EDC82 /* AppModel.swift in Sources */,
+				FFE34DDA27BD2E9A008EDC82 /* MainView.swift in Sources */,
+				FFECCA9227C550A6005B628A /* FileMenuCommands.swift in Sources */,
+				FF6B9BA127C7C27E004FE896 /* SingletonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
