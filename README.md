@@ -66,3 +66,17 @@ windows that get restarted just display the default title value. More on this bu
 `GenericView`.   
 
 
+2) POSSIBLE SINGLETON DEAL BREAKER - If use hosting window finder in conjunction with `.handlesExternalEvents(preferring: allowing:)` then it currently incorrectly allows the launching of multiple singleton windows, i.e. [swiftuiWindowFun://singleton](swiftuiWindowFun://singleton) will create additional windows ad infinitum. 
+
+How to fix - Not sure. 
+
+Anything that attempts to inserts a NSViewRespresentable (even when the view that its makeNSView returns is the same) 
+seems to cause handlesExternalEvent(preferring:, matching:) to think the existing instance is incapable of handling the new openURI request.
+
+Random ideas ...
+- Stop relying on handeExternalEvents(preferring:, matching:) to ensure single instance and instead programatically alter the outer WindowGroup's .handlesExternalEvents(matching:) so that it no longer routes.
+- Try to understand and fix the so that HostingWindowFinder does not cause forkage - why does the system think that there is not an existing window in the system that can handle the request and it needs to create a new one?
+
+ 
+
+
