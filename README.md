@@ -1,18 +1,30 @@
 # swiftuiWindowFun
 
-As of 2022/03 - SwiftUI's built in Window management via WindowGroup and Scene's is very limited. Many basic window operations are not available and require ugly code that drops to AppKit to achieve. 
+As of 2022/03 - SwiftUI's built in Window management via WindowGroup and Scene's is very limited. Many basic window 
+operations are not available and require ugly code that drops to AppKit to achieve. 
 
 This is one of two similar functionallity demo apps that aims to explore working around these limitations.
 
-In particular, this app attempts to maximise the use of SwiftUI and its life-cycle and to minimise direct usage of AppKit. 
 
-The other application, moreSwiftuiWindowFun - by way of a contrast - adopts an AppKit centric life-cycle with SwiftUI being limited to rendering the UI.  
+In particular, this app attempts to maximise the use of SwiftUI and its life-cycle and to minimise direct usage of 
+AppKit. 
+
+The other application, moreSwiftuiWindowFun - by way of a contrast - adopts an AppKit centric life-cycle with SwiftUI 
+being limited to rendering the UI.
+
+This approach is broken because any attempt to replace the existing found `NSWindow`'s delegate results in 
+in the singleton, and who knows what other functionallity being broken. 
+
+For more on that see readme in /Users/jhume/Work/Learning/_My_Experiments/_bugs_and_issues/macOSsingletonWindow
+
+
+  
 
 
 ## macOS window based operations demonstrated by the app
 
 
-
+VVVVV BROKEN VVVVV
 1. Creating and maintaining a single, unclosable main window.
     - Non-closable, ever present across restarts.
     - Restores on restart.
@@ -25,6 +37,10 @@ The other application, moreSwiftuiWindowFun - by way of a contrast - adopts an A
     - Only ever a single instance.
     - If existing instance, attempts to create new then raises existing instead.
     - Menu items to create and close windows respond appropriately.
+
+
+
+^^^^^^^^^^^^^^^^^^^^^^^ BROKEN ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 3. Generic window creation with remote raising and closing.
     - Closable
@@ -54,7 +70,7 @@ necessary to provide singleton windows. Window opening and routing is done in `A
 - The underlying `AppKit NSWindow` is obtained by using SwiftUI's `NSViewRepresentable` to add a hidden diagnostic `NSView` to the  window's render tree and pull the information from the that. See `HostingWindowFinder` for implementation, and `MainView`, `SingletonView` and `GenericView` for how it's been incorporated.
 
 - References to individual windows and control over what can be closed and post close cleaning operations is done 
-via `NSWindow` delegation. See `AppModel` and its extension `AppModel+NSWindowDelegat`. 
+via `NSWindow` delegation. See `AppModel` and its extension `AppModel+NSWindowDelegate`. 
 
 - Menu options set out in `FileMenuCommands` use a functionallity from `AppModel` to manage windows and control available menu options.
 
@@ -66,17 +82,9 @@ windows that get restarted just display the default title value. More on this bu
 `GenericView`.   
 
 
-2) POSSIBLE SINGLETON DEAL BREAKER - If use hosting window finder in conjunction with `.handlesExternalEvents(preferring: allowing:)` then it currently incorrectly allows the launching of multiple singleton windows, i.e. [swiftuiWindowFun://singleton](swiftuiWindowFun://singleton) will create additional windows ad infinitum. 
-
-How to fix - Not sure. 
-
-Anything that attempts to inserts a NSViewRespresentable (even when the view that its makeNSView returns is the same) 
-seems to cause handlesExternalEvent(preferring:, matching:) to think the existing instance is incapable of handling the new openURI request.
-
-Random ideas ...
-- Stop relying on handeExternalEvents(preferring:, matching:) to ensure single instance and instead programatically alter the outer WindowGroup's .handlesExternalEvents(matching:) so that it no longer routes.
-- Try to understand and fix the so that HostingWindowFinder does not cause forkage - why does the system think that there is not an existing window in the system that can handle the request and it needs to create a new one?
-
- 
+2) NOT FIXABLE - URI's to singleton windows e.g. [swiftuiWindowFun://singleton](swiftuiWindowFun://singleton). Will open  
 
 
+ hosting window finder in conjunction with `.handlesExternalEvents(preferring: allowing:)` then it currently incorrectly allows the launching of multiple singleton windows, i.e. [swiftuiWindowFun://singleton](swiftuiWindowFun://singleton) will create additional windows ad infinitum. 
+
+This is not fixable using this approach.

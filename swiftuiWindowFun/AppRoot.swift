@@ -22,7 +22,7 @@ struct AppRoot: App {
         /// create new instance there is no need for the handlesExternalEvents modifier to be used to enforce it's singleton'ness
         /// (as there is with the other window in the the app)
         WindowGroup(AppModel.permanentWinConfig.title) {
-            MainView()
+            PermanentView()
                 .environmentObject(appModel)
         }
         .handlesExternalEvents(matching: [AppModel.permanentWinConfig.uriHost])
@@ -34,18 +34,32 @@ struct AppRoot: App {
         WindowGroup(AppModel.singletonWinConfig.title) {
             SingletonView()
                 .environmentObject(appModel)
-                .handlesExternalEvents( // <- This used so that we only ever get one window
+            /*
+                .handlesExternalEvents( // <- Cannot be used to ensure only ever get one window when
+                    the HostingWindowFinder is used. Something about inserting a View (even the previous one)
+                    causes the framework to alway create a new Window.
+
+                    Tried with:
+
+                    preferring: Set(arrayLiteral: AppModel.singletonWinConfig.uriHost),
+                    allowing: Set(arrayLiteral: "*")
+
+                    and ...
+
                     preferring: [AppModel.singletonWinConfig.uriHost],
                     allowing: [AppModel.singletonWinConfig.uriHost]
                 )
+             */
         }
-        .handlesExternalEvents(matching: [AppModel.singletonWinConfig.uriHost])
+//        .handlesExternalEvents(matching: [AppModel.singletonWinConfig.uriHost])
+
+        .handlesExternalEvents(matching: appModel.singletonNSWindow == nil ? Set(arrayLiteral: AppModel.singletonWinConfig.uriHost) : Set(arrayLiteral: ""))
         .commands {
             FileMenuCommands(appModel: appModel)
         }
 
         /// Generic window, app can create as many of these as it likes
-        WindowGroup() {
+        WindowGroup {
             GenericView()
                 .environmentObject(appModel)
         }

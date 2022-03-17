@@ -51,7 +51,7 @@ struct FileMenuCommands: Commands {
         
         CommandGroup(replacing: CommandGroupPlacement.saveItem) {
             Button("Close") {
-                NSApp.keyWindow?.close()
+                NSApp.keyWindow?.performClose(nil)
             }
             .disabled(disableWindowClose)
             .keyboardShortcut(Self.windowClose)

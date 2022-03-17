@@ -28,7 +28,9 @@ class AppModel: NSObject, ObservableObject {
 
     @Published internal var permanentNSWindow: NSWindow? = nil
     @Published internal var singletonNSWindow: NSWindow? = nil
-    @Published var genericNSWindows: Array<NSWindow> = []
+    @Published var genericNSWindows: Set<NSWindow> = []
+    
+    
     @Published private(set) var keyWindow: NSWindow? = nil
 
     @Environment(\.openURL) private var openURL
@@ -89,22 +91,21 @@ class AppModel: NSObject, ObservableObject {
             }
             print("Registering a new singleton")
             singletonNSWindow = window
-            window.delegate = self // <- Have to assign the NSWindow delegate so you get an opportunity to remove from the model when the window closes
+
         }
     }
 
     func addGenericWindow(_ window: NSWindow?) {
         if let window = window {
             print("Adding window")
-            genericNSWindows.append(window)
-            window.delegate = self
+            genericNSWindows.insert(window)
+
         }
     }
 
     func setPermanentWindow(_ window: NSWindow?) {
         if let window = window {
             permanentNSWindow = window
-            window.delegate = self
         }
     }
 
