@@ -1,6 +1,6 @@
-# swiftuiWindowFun
+# macOS swiftuiWindowFun Readme
 
-As of 2022/03 - SwiftUI's built in Window management via WindowGroup and Scene's is very limited. Many basic window 
+As of 2022/03 - SwiftUI's macOS built in Window management via WindowGroup and Scene's is very limited. Many basic window 
 operations on macOS are not available and require dropping to AppKit to achieve. 
 
 This application demonstrates how this can be achieved.
