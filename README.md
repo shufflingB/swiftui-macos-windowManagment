@@ -7,6 +7,8 @@ This application demonstrates how this can be achieved.
 
 ## macOS window based operations demonstrated by the app
 
+![App running on macOS Monterey screenshot](appScreenShot.jpg "picture of demo app running on macOS Monterey 12.3")
+
 
 1. Creating and maintaining a single, unclosable main window.
     - Non-closable, ever present across restarts.
