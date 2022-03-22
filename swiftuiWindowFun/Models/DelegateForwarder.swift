@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
-class DelegateForwarder<T: NSObjectProtocol>: NSObject {
+class UnusedDelegateForwarer<T: NSObjectProtocol>: NSObject {
     ///
-    /// This is  based on Matt Curtiss' gist here https://gist.github.com/matt-curtis/65eb4bd7e98e6ace2d220c3067df7fc7
-    /// The class enable inserting our own delegate methods as fallbacks to the ones that SwiftUI configures for NSWindow's that it creates.
+    ///  **UNUSED CODE HERE FOR  CURIOSITY'S SAKE ONLY**
+    /// This is  based on Matt Curtiss' Gist here https://gist.github.com/matt-curtis/65eb4bd7e98e6ace2d220c3067df7fc7
+    /// The class was an attempt at  inserting delegate methods as  fallbacks to the ones that SwiftUI configuring for the NSWindow's that it creates.
     ///
-    /// Unfortunately SwiftUI seems to be reliant on side-effects associated with its own `NSWindowDelegate` instance (rather than just the delegates methods). So this approach
-    /// DOES NOT WORK  as method for supplying `NSWindow` delegate functionally in SwiftUI.  However,  it's useful and interesting  because of the way it probes what delegates
-    /// SwiftUI is supplying and when they are being triggered.
+    /// Unfortunately it does not work; SwiftUI seems to be reliant on side-effects associated with using its own `NSWindowDelegate` instances (rather than just the delegates methods) [0].
+    ///  However,  I've kept it here as  it's an interesting example of how it could have been done,  probing what delegates SwiftUI is supplying and when they are being triggered.
     ///
+    /// [0] What does work though is to extend `NSWindow` itself.
 
     weak var myDelegate: T?
     weak var swiftUIDelegate: T?

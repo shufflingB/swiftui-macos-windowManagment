@@ -15,45 +15,32 @@ struct AppRoot: App {
     /// App maintains three window groups
     /// - First is a main, permanently open window. This cannot be closed and there is no way in the app to create a new one.
     /// - Second is a singleton window. This can be closed but only a single instance of it may exists at one time
-    /// - Thid is a generic window, many of which can be spawned and closed as needed.
+    /// - Third is a generic window, many of which can be spawned and closed as needed.
 
     var body: some Scene {
         /// Default, permanent, non-closable, no way to create new one.  in the app "main: window. As there is no way to
         /// create new instance there is no need for the handlesExternalEvents modifier to be used to enforce it's singleton'ness
         /// (as there is with the other window in the the app)
-        WindowGroup(AppModel.permanentWinConfig.title) {
+        WindowGroup(AppConfig.PermanentWinConfig.title) {
             PermanentView()
                 .environmentObject(appModel)
         }
-        .handlesExternalEvents(matching: [AppModel.permanentWinConfig.uriHost])
+        .handlesExternalEvents(matching: [AppConfig.PermanentWinConfig.uriHost])
         .commands {
             FileMenuCommands(appModel: appModel)
         }
 
         /// Singleton window
-        WindowGroup(AppModel.singletonWinConfig.title) {
+        WindowGroup(AppConfig.SingletonWinConfig.title) {
             SingletonView()
                 .environmentObject(appModel)
-            /*
-                .handlesExternalEvents( // <- Cannot be used to ensure only ever get one window when
-                    the HostingWindowFinder is used. Something about inserting a View (even the previous one)
-                    causes the framework to alway create a new Window.
 
-                    Tried with:
-
-                    preferring: Set(arrayLiteral: AppModel.singletonWinConfig.uriHost),
-                    allowing: Set(arrayLiteral: "*")
-
-                    and ...
-
-                    preferring: [AppModel.singletonWinConfig.uriHost],
-                    allowing: [AppModel.singletonWinConfig.uriHost]
+                .handlesExternalEvents(
+                    preferring: [AppConfig.SingletonWinConfig.uriHost],
+                    allowing: [AppConfig.SingletonWinConfig.uriHost]
                 )
-             */
         }
-//        .handlesExternalEvents(matching: [AppModel.singletonWinConfig.uriHost])
-
-        .handlesExternalEvents(matching: appModel.singletonNSWindow == nil ? Set(arrayLiteral: AppModel.singletonWinConfig.uriHost) : Set(arrayLiteral: ""))
+        .handlesExternalEvents(matching: [AppConfig.SingletonWinConfig.uriHost])
         .commands {
             FileMenuCommands(appModel: appModel)
         }
@@ -63,7 +50,7 @@ struct AppRoot: App {
             GenericView()
                 .environmentObject(appModel)
         }
-        .handlesExternalEvents(matching: [AppModel.genericWinConfig.uriHost])
+        .handlesExternalEvents(matching: [AppConfig.GenericWinConfig.uriHost])
         .commands {
             FileMenuCommands(appModel: appModel)
         }

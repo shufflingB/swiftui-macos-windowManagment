@@ -9,50 +9,39 @@ import AppKit
 import Combine
 import SwiftUI
 
-class AppModel: NSObject, ObservableObject {
-    /// Bring NSObject into the eqn bc we have to assign ourselves as NSWindow.delegate to be able to remove windows from our records when they are closed.
-
+class AppModel: ObservableObject {
     static let shared = AppModel()
 
-    /// This needs to be set as per the Project's Target -> Info -> Url Type configurarion
-    static let urlSchemeName = "swiftuiWindowFun"
-    static let urlTitleQuerryItemKey = "title"
-
-    /// Configure window title's (or placeholder) and hostname part of the uri that is to get used to route to that window
-    static let permanentWinConfig = WindowConfig(title: "Permanent main window", uriHost: "main")
-    static let singletonWinConfig = WindowConfig(title: "Singleton window", uriHost: "singleton")
-    static let genericWinConfig = WindowConfig(title: "Placeholder generic window title", uriHost: "generic")
-
-    /// Set up a list of names to give to generic windows and tabs to make them a bit easier to distinguis and show how the URL routing and decoding works
-    static let testWindowNamesForTabsAndGenericWindows: Array<String> = ["Kirk", "Checkov", "McCoy", "Scotty", "Spock", "Sulu", "Uhura", "Pike", "Rand", "Trelane", "Surak", "Kelinda"]
-
+    /// These Published vars are used to hold references to the AppKit NSWindows that the hosting window finder gets for us. We set them in here but they are cleared in a
+    /// `NSWindow: NSWindowDelegate`. We have to do this rather than here using a delegate for the found NSWindow, because SwiftUI provides its own delegate for the windows
+    /// it creates, and replacing those with own delegate object - even a pass-throug/forwarding one - for the window causes SwiftUI window management to fail (in particular the singleton
+    /// handling provided by `handlesExternalEvents(preferring:allowing:)`)
     @Published internal var permanentNSWindow: NSWindow? = nil
     @Published internal var singletonNSWindow: NSWindow? = nil
-    @Published var genericNSWindows: Set<NSWindow> = []
-    
-    
+    @Published internal var genericNSWindows: Set<NSWindow> = []
+
     @Published private(set) var keyWindow: NSWindow? = nil
 
     @Environment(\.openURL) private var openURL
 
     private var anyCancellable: Set<AnyCancellable> = []
 
-    override init() {
-        super.init()
-
-        // We need to keep a record of what the keyWindow is because although we have references to our own
-        // NSWindow, those references do not get their keyWindow attributes updated in the SwiftUI lifecycle.
-        // i.e. "if singletonNSWindow.isKeyWindow == true then do something" does not reliably stay up to date.
-        // Whereas "if singletonNSWindow == appModel.keyWindow ..." does work reliably.
-        //
-        /// **NB**: This has to be NSApplication.shared.publisher(for:  format ...) because  NSApp.publisher(for: \.keyWindow)
-        /// crashes as it's not initialised and NSApplication.shared.keyWindow.publisher just doesn't publish anything.
-        /// This, along with the fact that NSApplication.shared.publisher(for: \.windows) does not publish anything either
-        /// leads to a strong suspicion that when the SwiftUI app lifecycle is being used the normal underlying AppKit lifecycle is
-        /// is different.
-        /// **==>> This code could be liable to breakage with a subsequent releases of SwiftUI. Although hopefully by that time
-        /// something less hacky will be available ... one to watch out for!
+    init() {
+        /// Keep a record of what the keyWindow is because although we have references to our own `NSWindow`, those references do not appear to be getting  their keyWindow
+        /// attributes updated in the SwiftUI lifecycle. i.e. `if singletonNSWindow.isKeyWindow == true then do something` does not work reliably. But if we set up
+        /// our own listener for those changes that works.
         ///
+        /// **NB**: Possible fragile solution for SwiftUI life-cycle
+        /// This has to be `NSApplication.shared.publisher(for:  format ...)` and not:
+        /// 1. `NSApp.publisher(for: \.keyWindow)` because that crashes as it's not initialised when this run.
+        /// 2. `NSApplication.shared.keyWindow.publisher` because it just doesn't publish anything.
+        ///
+        /// Which, along with the fact that the app's window list publisher `NSApplication.shared.publisher(for: \.windows)` also does not publish updates  leads to the
+        /// conclusing that previous AppKit window management tooling cannot be relied upon to be functional either now, or possibly in the future within the context of a SwiftUI app
+        /// life-cycle. ** i.e. This code could be liable to breakage with a subsequent releases of SwiftUI [0]
+        ///
+        /// [0] Although hopefully by that time something less hacky will be available.
+    
 
         NSApplication.shared.publisher(for: \.keyWindow)
             .sink { keyWindow in
@@ -61,27 +50,30 @@ class AppModel: NSObject, ObservableObject {
             .store(in: &anyCancellable)
     }
 
-    /// If wondering, no need for an openPermanentWindow because SwiftUI does that for us by default and the app has no way to close that one
+    /// func openPermanentWindow() {
+    /// /// No need for this  because SwiftUI create the window by default at startup and the app has no way to close that one so it should never need reopening
+    /// }
+
     func openOrRaiseSingletonWindow() {
         guard singletonNSWindow == nil else {
             singletonNSWindow!.makeKeyAndOrderFront(nil)
             return
         }
-        openWindowViaUrl(Self.singletonWinConfig)
+        openWindowViaUrl(AppConfig.SingletonWinConfig)
     }
 
     func openGenericWindow() {
-        guard let title: String = Self.testWindowNamesForTabsAndGenericWindows.randomElement() else {
+        guard let title: String = AppConfig.TestWindowNamesForTabsAndGenericWindows.randomElement() else {
             print("Error, unable to create generic window because couldn't get a suitable random title for it")
             return
         }
 
-        openWindowViaUrl(Self.genericWinConfig, querries: [URLQueryItem(name: Self.urlTitleQuerryItemKey, value: title)])
+        openWindowViaUrl(AppConfig.GenericWinConfig, querries: [URLQueryItem(name: AppConfig.UrlTitleQuerryItemKey, value: title)])
     }
 
-    /// Aside: It's a bit annoying that:
-    /// 1. We have to maintain these window references ourselves and can't rely on AppKit's normal toolbox to account for the for us - specifically AppKit's  NSApplication.windows.publisher does not seem to work  in the SwiftUI life-cycle.
-    /// 2. We have to use a`HostingWindowFinder`probe view post handling the URL to get hold of the new window references, because opening via openURI is the only "pure" SwiftUI way to open a new windows and it does not give us an reference to the new window when we trigger the fork.
+    /// 1) We have to maintain these window references ourselves because AppKit's `NSApplication.windows.publisher` does not  work  in the SwiftUI app life-cycle.
+    /// 2) We have to use a `HostingWindowFinder`probe view after handling the URL routing to get the `NSWindow` references because opening via openURI is currently
+    /// the only  idiomatic SwiftUI approach to opening a new window, and opening a URL doesn't provide the window reference when new window the is forked off.
 
     func setSingletonWindow(_ window: NSWindow?) {
         if let window = window {
@@ -91,15 +83,13 @@ class AppModel: NSObject, ObservableObject {
             }
             print("Registering a new singleton")
             singletonNSWindow = window
-
         }
     }
 
     func addGenericWindow(_ window: NSWindow?) {
         if let window = window {
-            print("Adding window")
+            print("Adding generic window")
             genericNSWindows.insert(window)
-
         }
     }
 
@@ -113,7 +103,7 @@ class AppModel: NSObject, ObservableObject {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         if let queryItems = components?.queryItems {
 //            print("qu = \(queryItems)")
-            let title: String? = queryItems.first(where: { $0.name == Self.urlTitleQuerryItemKey })?.value
+            let title: String? = queryItems.first(where: { $0.name == AppConfig.UrlTitleQuerryItemKey })?.value
             if let title = title {
                 return title
             } else {
@@ -126,11 +116,10 @@ class AppModel: NSObject, ObservableObject {
         }
     }
 
-    
     /// NB: This approach will only work if the app has registered a URL Type handling scheme as part of its target config under Project -> Target swiftuiWindowFun -> Info -> URL Types )
     private func openWindowViaUrl(_ winConfig: WindowConfig, querries: Array<URLQueryItem> = []) {
         var components = URLComponents()
-        components.scheme = Self.urlSchemeName
+        components.scheme = AppConfig.UrlSchemeName
         components.host = winConfig.uriHost
         components.queryItems = querries
 

@@ -14,6 +14,8 @@
 		FF6B9BA327C7C551004FE896 /* NSWindow+NSWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B9BA227C7C551004FE896 /* NSWindow+NSWindowDelegate.swift */; };
 		FF6B9BA527C7D6AB004FE896 /* WindowConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B9BA427C7D6AB004FE896 /* WindowConfig.swift */; };
 		FF6B9BA727C91865004FE896 /* GenericView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6B9BA627C91865004FE896 /* GenericView.swift */; };
+		FF939FEE27E9DFE80043C930 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF939FED27E9DFE80043C930 /* AppConfig.swift */; };
+		FF939FF027EA03D80043C930 /* PermanentPureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF939FEF27EA03D80043C930 /* PermanentPureView.swift */; };
 		FF9C9CE227E3A94D009EB472 /* DelegateForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9C9CE127E3A94D009EB472 /* DelegateForwarder.swift */; };
 		FFE34DCE27B57BA1008EDC82 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE34DCD27B57BA1008EDC82 /* AppModel.swift */; };
 		FFE34DD627B5813D008EDC82 /* HostingWindowFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE34DD527B5813D008EDC82 /* HostingWindowFinder.swift */; };
@@ -32,6 +34,8 @@
 		FF6B9BA227C7C551004FE896 /* NSWindow+NSWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSWindow+NSWindowDelegate.swift"; sourceTree = "<group>"; };
 		FF6B9BA427C7D6AB004FE896 /* WindowConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowConfig.swift; sourceTree = "<group>"; };
 		FF6B9BA627C91865004FE896 /* GenericView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericView.swift; sourceTree = "<group>"; };
+		FF939FED27E9DFE80043C930 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		FF939FEF27EA03D80043C930 /* PermanentPureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermanentPureView.swift; sourceTree = "<group>"; };
 		FF9C9CE127E3A94D009EB472 /* DelegateForwarder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegateForwarder.swift; sourceTree = "<group>"; };
 		FFE34DCD27B57BA1008EDC82 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		FFE34DD527B5813D008EDC82 /* HostingWindowFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostingWindowFinder.swift; sourceTree = "<group>"; };
@@ -72,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				FF4CA82827B4402D00E9A47F /* AppRoot.swift */,
+				FF939FED27E9DFE80043C930 /* AppConfig.swift */,
 				FF6B9BA827C92B7A004FE896 /* Models */,
 				FFE34DDB27BD2EA7008EDC82 /* SwiftUI */,
 				FF4CA83727B440A500E9A47F /* Info.plist */,
@@ -107,6 +112,7 @@
 				FFECCA9127C550A6005B628A /* FileMenuCommands.swift */,
 				FFE34DD527B5813D008EDC82 /* HostingWindowFinder.swift */,
 				FFE34DD927BD2E9A008EDC82 /* PermanentView.swift */,
+				FF939FEF27EA03D80043C930 /* PermanentPureView.swift */,
 				FF6B9BA027C7C27E004FE896 /* SingletonView.swift */,
 				FF6B9BA627C91865004FE896 /* GenericView.swift */,
 			);
@@ -186,7 +192,9 @@
 				FF6B9BA327C7C551004FE896 /* NSWindow+NSWindowDelegate.swift in Sources */,
 				FF9C9CE227E3A94D009EB472 /* DelegateForwarder.swift in Sources */,
 				FFE34DD627B5813D008EDC82 /* HostingWindowFinder.swift in Sources */,
+				FF939FF027EA03D80043C930 /* PermanentPureView.swift in Sources */,
 				FF6B9BA727C91865004FE896 /* GenericView.swift in Sources */,
+				FF939FEE27E9DFE80043C930 /* AppConfig.swift in Sources */,
 				FF6B9BA527C7D6AB004FE896 /* WindowConfig.swift in Sources */,
 				FF4CA82927B4402D00E9A47F /* AppRoot.swift in Sources */,
 				FFE34DCE27B57BA1008EDC82 /* AppModel.swift in Sources */,

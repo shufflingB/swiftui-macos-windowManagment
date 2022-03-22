@@ -8,15 +8,10 @@
 import SwiftUI
 
 struct FileMenuCommands: Commands {
-    @ObservedObject var appModel: AppModel // = AppModel.shared
-
-    @State var keyWindow: NSWindow? = nil
-
-    static let newSingleWindow = KeyboardShortcut("1", modifiers: .command)
-    static let newGenericWindow = KeyboardShortcut("2", modifiers: .command)
-    static let windowClose = KeyboardShortcut("W", modifiers: .command)
+    @ObservedObject var appModel: AppModel
 
     var disableWindowClose: Bool {
+        /// By default, SwiftUI's built in close window will close any window, so we need to be able to toggle that off when we're displaying the permanent window.
         if appModel.permanentNSWindow == appModel.keyWindow {
             return true
         } else {
@@ -33,28 +28,27 @@ struct FileMenuCommands: Commands {
     }
 
     var body: some Commands {
+        /// NB: The default newItem uses a non-swiftUI  api to create new instances of whatever the first WindowGroup. So if  using
+        /// `.handlesExternalEvents(preferring: allowing: )` to do singleton (as here)  this has to be overriden or what's built in will break that functionallity by ignoring
+        /// the restriction that only works when items are created via the URI handling mechanism.
         CommandGroup(replacing: CommandGroupPlacement.newItem) {
             Button(disableOrRaiseMsg) {
                 appModel.openOrRaiseSingletonWindow()
             }
-            .keyboardShortcut(Self.newSingleWindow)
-            
+            .keyboardShortcut(AppConfig.NewSingleWindow)
+
             Button("New generic window") {
                 appModel.openGenericWindow()
             }
-            .keyboardShortcut(Self.newGenericWindow)
-            
+            .keyboardShortcut(AppConfig.NewGenericWindow)
         }
 
-        
-        
-        
         CommandGroup(replacing: CommandGroupPlacement.saveItem) {
             Button("Close") {
                 NSApp.keyWindow?.performClose(nil)
             }
             .disabled(disableWindowClose)
-            .keyboardShortcut(Self.windowClose)
+            .keyboardShortcut(AppConfig.WindowClose)
         }
     }
 }

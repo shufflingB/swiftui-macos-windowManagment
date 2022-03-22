@@ -1,53 +1,33 @@
 # swiftuiWindowFun
 
 As of 2022/03 - SwiftUI's built in Window management via WindowGroup and Scene's is very limited. Many basic window 
-operations are not available and require ugly code that drops to AppKit to achieve. 
+operations on macOS are not available and require dropping to AppKit to achieve. 
 
-This is one of two similar functionallity demo apps that aims to explore working around these limitations.
-
-
-In particular, this app attempts to maximise the use of SwiftUI and its life-cycle and to minimise direct usage of 
-AppKit. 
-
-The other application, moreSwiftuiWindowFun - by way of a contrast - adopts an AppKit centric life-cycle with SwiftUI 
-being limited to rendering the UI.
-
-This approach is broken because any attempt to replace the existing found `NSWindow`'s delegate results in 
-in the singleton, and who knows what other functionallity being broken. 
-
-For more on that see readme in /Users/jhume/Work/Learning/_My_Experiments/_bugs_and_issues/macOSsingletonWindow
-
-
-  
-
+This application demonstrates how this can be achieved.
 
 ## macOS window based operations demonstrated by the app
 
 
-VVVVV BROKEN VVVVV
 1. Creating and maintaining a single, unclosable main window.
     - Non-closable, ever present across restarts.
     - Restores on restart.
     - Close button removed from window chrome.
-    - Menu close window options respond to window selection appropriately.
+    - Menu close window items respond to window selection appropriately.
 
-2. Singleton secondary.
+2. Singleton windows.
     - Closable.
-    - Restores on restart
+    - Restore on restart if left open
     - Only ever a single instance.
     - If existing instance, attempts to create new then raises existing instead.
     - Menu items to create and close windows respond appropriately.
 
 
-
-^^^^^^^^^^^^^^^^^^^^^^^ BROKEN ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 3. Generic window creation with remote raising and closing.
     - Closable
     - Instances restore on restart.
     - Windows given identifiable titles.
-    - Menu items to create and close windows respond correctly. 
-
+    - Menu items to create and close windows respond correctly.
+     
 
 4. App menu creation and entry validation along with keyboard shortcuts operates as would be expected for each window type.
 
@@ -55,6 +35,8 @@ VVVVV BROKEN VVVVV
 
     - Open or raise a singleton window - [swiftuiWindowFun://singleton](swiftuiWindowFun://singleton)
     - Open and route to a generic window - [swiftuiWindowFun://generic?title=Spock](swiftuiWindowFun://generic?title=Spock)
+
+6. Maintaining a list of windows, programatic raising and closing as needed.
 
 
 ## Approach
@@ -67,24 +49,15 @@ Specifically ...
 - Uses openURL to spawn new windows in conjunction with `.handlesExternalEvents(preferring: allowing:)` where
 necessary to provide singleton windows. Window opening and routing is done in `AppModel`.
 
-- The underlying `AppKit NSWindow` is obtained by using SwiftUI's `NSViewRepresentable` to add a hidden diagnostic `NSView` to the  window's render tree and pull the information from the that. See `HostingWindowFinder` for implementation, and `MainView`, `SingletonView` and `GenericView` for how it's been incorporated.
+- The underlying `AppKit NSWindow` is obtained by using SwiftUI's `NSViewRepresentable` to add a hidden diagnostic probe 
+`NSView` to the  window's render tree and pull the information from the that. See `HostingWindowFinder` for 
+implementation, and `PermanentView`, `SingletonView` and `GenericView` for how it has been incorporated.
 
 - References to individual windows and control over what can be closed and post close cleaning operations is done 
-via `NSWindow` delegation. See `AppModel` and its extension `AppModel+NSWindowDelegate`. 
+via `NSWindow` delegation. See `AppModel` and its extension `NSWindow+NSWindowDelegate` for more on that. 
 
-- Menu options set out in `FileMenuCommands` use a functionallity from `AppModel` to manage windows and control available menu options.
-
-## Known bugs
-
-1) The window titles for the "generic windows" are current being set when they are created 
-and they should be persisting in SceneStorage between app restarts. However that doesn't work, and generic 
-windows that get restarted just display the default title value. More on this bug and workarounds in
-`GenericView`.   
+- Menu options are set out in `FileMenuCommands` which uses functionallity from `AppModel` to manage windows and control
+ available menu options.
 
 
-2) NOT FIXABLE - URI's to singleton windows e.g. [swiftuiWindowFun://singleton](swiftuiWindowFun://singleton). Will open  
-
-
- hosting window finder in conjunction with `.handlesExternalEvents(preferring: allowing:)` then it currently incorrectly allows the launching of multiple singleton windows, i.e. [swiftuiWindowFun://singleton](swiftuiWindowFun://singleton) will create additional windows ad infinitum. 
-
-This is not fixable using this approach.
+More details and notes in code.
