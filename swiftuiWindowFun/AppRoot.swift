@@ -5,7 +5,6 @@
 //  Created by Jonathan Hume on 09/02/2022.
 //
 
-import Combine
 import SwiftUI
 
 @main
@@ -24,36 +23,30 @@ struct AppRoot: App {
         WindowGroup(AppConfig.PermanentWinConfig.title) {
             PermanentView()
                 .environmentObject(appModel)
+                .background { HostingWindowFinder(callback: appModel.setPermanentWindow) }
         }
         .handlesExternalEvents(matching: [AppConfig.PermanentWinConfig.uriHost])
         .commands {
             FileMenuCommands(appModel: appModel)
         }
 
-        /// Singleton window
+        /// Singleton window - handled by `handlesExternalEvents(preferring: allowing:)` in the SingletonView itself
         WindowGroup(AppConfig.SingletonWinConfig.title) {
             SingletonView()
                 .environmentObject(appModel)
-
-                .handlesExternalEvents(
-                    preferring: [AppConfig.SingletonWinConfig.uriHost],
-                    allowing: [AppConfig.SingletonWinConfig.uriHost]
-                )
+                .background { HostingWindowFinder(callback: appModel.setSingletonWindow) }
         }
         .handlesExternalEvents(matching: [AppConfig.SingletonWinConfig.uriHost])
         .commands {
             FileMenuCommands(appModel: appModel)
         }
 
-        /// Generic window, app can create as many of these as it likes
+        /// Generic window, app can create as many of these as it likes but if one with the same title exists it will be raised instead of creating a new one
+        /// - handled by `handlesExternalEvents(preferring: allowing:)` in the GenericView itself
         WindowGroup {
             GenericView()
                 .environmentObject(appModel)
-                .background {
-                    HostingWindowFinder(callback: { foundWin in
-                        appModel.addGenericWindow(foundWin)
-                    })
-                }
+                .background { HostingWindowFinder(callback: appModel.addGenericWindow) }
         }
         .handlesExternalEvents(matching: [AppConfig.GenericWinConfig.uriHost])
         .commands {

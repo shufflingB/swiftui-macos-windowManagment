@@ -1,6 +1,6 @@
 # macOS swiftuiWindowFun Readme
 
-As of 2022/03 - SwiftUI's macOS built in Window management via WindowGroup and Scene's is very limited. Many basic window 
+As of 2022/03 - SwiftUI's macOS built in Window management via the `WindowGroups` and `Scenes` mechanism is very limited. Many basic window 
 operations on macOS are not available and require dropping to AppKit to achieve. 
 
 This application demonstrates how this can be achieved.
@@ -29,6 +29,7 @@ This application demonstrates how this can be achieved.
     - Instances restore on restart.
     - Windows given identifiable titles.
     - Menu items to create and close windows respond correctly.
+    - If existing window has same title, then opening raises that instance rather than creating a new window.
      
 
 4. App menu creation and entry validation along with keyboard shortcuts operates as would be expected for each window type.
@@ -40,11 +41,15 @@ This application demonstrates how this can be achieved.
 
 6. Maintaining a list of windows, programatic raising and closing as needed.
 
+## Requirements 
+This project has been built using Xcode 13.2 targeting macOS 12.1 Monterey and hand tested with version 12.3.  
+
+It should build and run successfully on any **macOS 12. Monterey** installation.
 
 ## Approach
 
 App attempts to use SwiftUI to maximum extent possible but goes under the covers to get hold of a 
-`NSWindow` reference to enable it to add missing macOS standard control and customisation functioinallity.
+`NSWindow` reference to enable it to add missing macOS standard control and customisation functionallity.
 
 Specifically ...
 

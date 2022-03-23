@@ -7,22 +7,18 @@
 
 import SwiftUI
 
-
 /// An example ever-present, single instnace view  intended to act a demo for an app main window type of thing.
 struct PermanentView: View {
     @EnvironmentObject var appModel: AppModel
 
     var body: some View {
-        ZStack {
-            HostingWindowFinder(callback: appModel.setPermanentWindow)
-            PermanentPureView(
-                openOrRaiseSingletonWindow: appModel.openOrRaiseSingletonWindow,
-                openGenericWindow: appModel.openGenericWindow,
-                singleton: appModel.singletonNSWindow,
-                genericWins: appModel.genericNSWindows
-            )
-            .padding()
-        }
+        PermanentPureView(
+            openOrRaiseSingletonWindow: appModel.openOrRaiseSingletonWindow,
+            openGenericWindow: appModel.openGenericWindow,
+            singleton: appModel.singletonNSWindow,
+            genericWins: appModel.genericNSWindows
+        )
+        .padding()
         .frame(minWidth: 200, maxWidth: .infinity, minHeight: 200, maxHeight: .infinity)
         .onChange(of: appModel.permanentNSWindow, perform: { newValue in
             /// Hide the close button - it would be nice to create it without but using url to create means we currently do not have access a-priori access to  the `NSWindow` instance

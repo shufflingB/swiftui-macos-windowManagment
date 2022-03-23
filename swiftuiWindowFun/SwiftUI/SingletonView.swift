@@ -12,16 +12,20 @@ struct SingletonView: View {
     @EnvironmentObject var appModel: AppModel
 
     var body: some View {
-        ZStack {
-            HostingWindowFinder { newWindow in
-                if appModel.singletonNSWindow == nil {
-                    appModel.setSingletonWindow(newWindow)
-                }
-            }
+        VStack {
+//            HostingWindowFinder { newWindow in
+//                if appModel.singletonNSWindow == nil {
+//                    appModel.setSingletonWindow(newWindow)
+//                }
+//            }
 
             Text("Hello from the singleton window")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .handlesExternalEvents(  /// Any instance of this view, raise it rather than create it afresh
+            preferring: [AppConfig.SingletonWinConfig.uriHost],
+            allowing: [AppConfig.SingletonWinConfig.uriHost]
+        )
     }
 }
 

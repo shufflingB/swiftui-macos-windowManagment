@@ -21,6 +21,7 @@ extension NSWindow: NSWindowDelegate {
         case appModel.permanentNSWindow?.windowNumber:
             print("Denying enquiry to close \(sender.title), \(sender.windowNumber)")
             return false /// It's a permanent window, so any request to close it should be refused.
+            
         case appModel.singletonNSWindow?.windowNumber:
             print("Allowing closing of window \(sender.title), \(sender.windowNumber)")
             appModel.singletonNSWindow = nil

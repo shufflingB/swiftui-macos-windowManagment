@@ -9,18 +9,20 @@ import SwiftUI
 
 struct GenericView: View {
     @EnvironmentObject var appModel: AppModel
-    @SceneStorage("navtitle") private var navTitle: String?
-
+    @SceneStorage("navtitle") private var navTitle: String = "Not set"
+    
     var body: some View {
         VStack {
-            Text("Hello from generic window \(navTitle ?? "not set")")
+            Text("Hello from generic window \(navTitle)")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationTitle(navTitle)
         .onOpenURL(perform: { url in
             print("Got opened from a URL \(url)")
             navTitle = AppModel.titleFromUrl(url) ?? "Set failed"
         })
-        .navigationTitle(navTitle ?? "Not set")
+        .handlesExternalEvents(preferring: [navTitle], allowing: [navTitle]) /// Any instance of this view AND with this title, then raise rather than
+        /// create a new instance
     }
 }
 
