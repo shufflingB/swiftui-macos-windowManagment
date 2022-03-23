@@ -49,6 +49,11 @@ struct AppRoot: App {
         WindowGroup {
             GenericView()
                 .environmentObject(appModel)
+                .background {
+                    HostingWindowFinder(callback: { foundWin in
+                        appModel.addGenericWindow(foundWin)
+                    })
+                }
         }
         .handlesExternalEvents(matching: [AppConfig.GenericWinConfig.uriHost])
         .commands {

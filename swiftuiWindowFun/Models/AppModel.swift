@@ -55,10 +55,8 @@ class AppModel: ObservableObject {
     /// }
 
     func openOrRaiseSingletonWindow() {
-        guard singletonNSWindow == nil else {
-            singletonNSWindow!.makeKeyAndOrderFront(nil)
-            return
-        }
+        /// `handleExternalEvents(preferring: allowing:)` is used to ensure singleton'ness as that will work both for us opening here and for anyone
+        /// clicking on a link in an external application
         openWindowViaUrl(AppConfig.SingletonWinConfig)
     }
 

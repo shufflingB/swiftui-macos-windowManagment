@@ -12,13 +12,8 @@ struct GenericView: View {
     @SceneStorage("navtitle") private var navTitle: String?
 
     var body: some View {
-        ZStack {
-            HostingWindowFinder(callback: { foundWin in
-                appModel.addGenericWindow(foundWin)
-            })
-            VStack {
-                Text("Hello from generic window \(navTitle ?? "not set")")
-            }
+        VStack {
+            Text("Hello from generic window \(navTitle ?? "not set")")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onOpenURL(perform: { url in
